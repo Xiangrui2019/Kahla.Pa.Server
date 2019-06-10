@@ -2,7 +2,9 @@ package main
 
 import (
 	"Kahla.PublicAddress.Server/errors"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -174,7 +176,7 @@ func (this *PublicAddressServer) StartEventListener(interrupt <-chan struct{}, d
 							log.Println("消息处理完成...")
 							log.Println("消息数据是: " + content)
 
-							_, err = http.PostForm(this.callbackURL+this.MessageCallbackEndpoint, url.Values{
+							resp, err := http.PostForm(this.callbackURL+this.MessageCallbackEndpoint, url.Values{
 								"Username":       {v.Sender.NickName},
 								"ConversationId": {strconv.Itoa(response.ConversationID)},
 								"Message":        {content},
@@ -184,7 +186,28 @@ func (this *PublicAddressServer) StartEventListener(interrupt <-chan struct{}, d
 
 							if err != nil {
 								log.Println(err)
+								this.SendMessageByToken(response.Token, "消息处理服务器出错: " + err.Error())
 							}
+
+							defer resp.Body.Close()
+
+							body, err :=ioutil.ReadAll(resp.Body)
+
+							if err != nil {
+								log.Println(err)
+								this.SendMessageByToken(response.Token, "消息处理服务器出错: " + err.Error())
+							}
+
+							cresponse := &models.CallbackResponse{}
+
+							err = json.Unmarshal(body, cresponse)
+
+							if err != nil {
+								log.Println(err)
+								this.SendMessageByToken(response.Token, "服务器出错，返回数据无效: " + err.Error())
+							}
+
+							this.SendMessageByToken(cresponse.Token, cresponse.Message)
 
 							log.Println("回调到服务器成功: " + this.callbackURL)
 							log.Println("请检查服务器状态.....")
@@ -210,12 +233,13 @@ func (this *PublicAddressServer) StartEventListener(interrupt <-chan struct{}, d
 }
 
 func (this *PublicAddressServer) CreateHTTPAPIServer() {
+	gin.SetMode(gin.ReleaseMode)
+
 	router := gin.Default()
 
-	router.GET("/send", func(c *gin.Context) {
-		token := c.Query("token")
-		content := c.Query("content")
-
+	router.POST("/send", func(c *gin.Context) {
+		token := c.PostForm("token")
+		content := c.PostForm("content")
 
 		if token == "" {
 			c.JSON(401, gin.H{
