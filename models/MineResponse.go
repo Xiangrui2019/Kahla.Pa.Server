@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type MineResponse struct {
+type AllResponse struct {
 	Users []struct {
 		DisplayName       string    `json:"displayName"`
 		DisplayImageKey   int       `json:"displayImageKey"`

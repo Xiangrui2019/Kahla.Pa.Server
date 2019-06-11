@@ -41,12 +41,12 @@ func (s *AuthService) InitPusher() (*models.InitPusherResponse, error) {
 	return response, nil
 }
 
-func (s *FriendshipService) Mine() (*models.MineResponse, error) {
+func (s *FriendshipService) All() (*models.AllResponse, error) {
 	req, err := http.NewRequest("GET", consts.KahlaServer+"/conversation/All", nil)
 	if err != nil {
 		return nil, err
 	}
-	response := &models.MineResponse{}
+	response := &models.AllResponse{}
 	_, err = s.client.Do(req, response)
 	if err != nil {
 		return nil, err

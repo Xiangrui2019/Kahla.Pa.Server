@@ -1,0 +1,9 @@
+{
+  "PublicAddressName": "",
+  "Email": "",
+  "Password": "",
+  "Port": 0,
+  "CallbackURL": "",
+  "TokenStorageEndpoint": "",
+  "MessageCallbackEndpoint": ""
+}
