@@ -275,7 +275,7 @@ func (this *PublicAddressServer) CreateHTTPAPIServer() {
 		}
 		c.JSON(200, gin.H{
 			"code": consts.ResponseCodeOK,
-			"msg":  "OK",
+			"msg":  "The message was sent successfully.",
 		})
 	})
 
