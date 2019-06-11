@@ -3,7 +3,7 @@ package models
 import "time"
 
 type MyFriendsResponse struct {
-	Items []struct {
+	Users []struct {
 		DisplayName       string    `json:"displayName"`
 		DisplayImageKey   int       `json:"displayImageKey"`
 		LatestMessage     string    `json:"latestMessage"`
