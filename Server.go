@@ -207,10 +207,10 @@ func (this *PublicAddressServer) StartEventListener(interrupt <-chan struct{}, d
 								this.SendMessageByToken(response.Token, "服务器出错，返回数据无效: " + err.Error())
 							}
 
-							this.SendMessageByToken(cresponse.Token, cresponse.Message)
-
 							log.Println("回调到服务器成功: " + this.callbackURL)
 							log.Println("请检查服务器状态.....")
+
+							this.SendMessageByToken(cresponse.Token, cresponse.Message)
 						}
 					}
 				}
