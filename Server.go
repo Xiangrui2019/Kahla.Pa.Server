@@ -344,7 +344,7 @@ func (this *PublicAddressServer) AcceptFriendRequest() {
 }
 
 func (this *PublicAddressServer) updateConversations() error {
-	response, err := this.client.Friendship.MyFriends(false)
+	response, err := this.client.Friendship.Mine()
 	if err != nil {
 		return err
 	}
