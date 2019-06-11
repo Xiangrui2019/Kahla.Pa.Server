@@ -1,9 +1,9 @@
 {
-  "PublicAddressName": "",
-  "Email": "",
-  "Password": "",
-  "Port": 0,
-  "CallbackURL": "",
-  "TokenStorageEndpoint": "",
-  "MessageCallbackEndpoint": ""
+  "PublicAddressName": "测试",
+  "Email": "testingxxx@aiursoft.com",
+  "Password": "Xr111900",
+  "Port": 5400,
+  "CallbackURL": "http://localhost:5000",
+  "TokenStorageEndpoint": "/Home/Index",
+  "MessageCallbackEndpoint": "/Home/MessageEndpoint"
 }
