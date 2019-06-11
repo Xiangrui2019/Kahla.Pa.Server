@@ -349,8 +349,8 @@ func (this *PublicAddressServer) updateConversations() error {
 		return err
 	}
 	conversationsMap := this.conversations.KeyByConversationID()
-	conversations := make(models.Conversations, 0, len(*this.conversations)+len(response.Items))
-	for _, v := range response.Items {
+	conversations := make(models.Conversations, 0, len(*this.conversations)+len(response.Users))
+	for _, v := range response.Users {
 		v1, ok := conversationsMap[v.ConversationID]
 		if ok {
 			conversations = append(conversations, v1)
@@ -387,7 +387,6 @@ func (this *PublicAddressServer) sendNewTokens() error {
 	for _, v := range *this.conversations {
 		if v.Token == "" {
 			v.Token = randomString(32)
-
 			_, err := http.PostForm(this.callbackURL+this.TokenStorageEndpoint, url.Values{
 				"ConversationId": {strconv.Itoa(v.ConversationID)},
 				"Token":          {v.Token},

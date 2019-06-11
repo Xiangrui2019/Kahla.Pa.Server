@@ -2,6 +2,7 @@ package kahla
 
 import (
 	"Kahla.PublicAddress.Server/errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -41,9 +42,7 @@ func (s *AuthService) InitPusher() (*models.InitPusherResponse, error) {
 }
 
 func (s *FriendshipService) MyFriends(orderByName bool) (*models.MyFriendsResponse, error) {
-	v := url.Values{}
-	v.Set("orderByName", strconv.FormatBool(orderByName))
-	req, err := http.NewRequest("GET", consts.KahlaServer+"/friendship/MyFriends?"+v.Encode(), nil)
+	req, err := http.NewRequest("GET", consts.KahlaServer+"/conversation/All", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -121,6 +120,7 @@ func (s *OssService) FileDownloadAddress(FileKey int) (string, error) {
 func (c *ConversationService) SendMessage(conversationId int, content string) (*models.SendMessageResponse, error) {
 	v := url.Values{}
 	v.Add("content", content)
+	fmt.Println(content)
 	req, err := NewPostRequest(consts.KahlaServer+"/conversation/SendMessage/"+strconv.Itoa(conversationId), v)
 	if err != nil {
 		return nil, err
