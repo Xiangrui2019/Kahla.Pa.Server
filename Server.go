@@ -162,8 +162,6 @@ func (this *PublicAddressServer) StartEventListener(interrupt <-chan struct{}, d
 				if err != nil {
 					log.Println(err)
 				} else {
-					log.Println("消息解密成功.....")
-					log.Printf("卡拉服务器发来了一条消息: %s .....", content)
 					if true {
 						response, err := this.conversations.GetByConversationID(v.ConversationID)
 
@@ -172,6 +170,8 @@ func (this *PublicAddressServer) StartEventListener(interrupt <-chan struct{}, d
 						}
 
 						if v.Sender.NickName != this.PublicAddressName {
+							log.Println("消息解密成功.....")
+							log.Printf("卡拉服务器发来了一条消息: %s .....", content)
 							content, messagetype := ProcessMessage(content, this.client)
 							log.Println("消息处理完成...")
 							log.Println("消息数据是: " + content)

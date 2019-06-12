@@ -8,4 +8,5 @@ type Config struct {
 	CallbackURL             string `json:"CallbackURL"`
 	TokenStorageEndpoint    string `json:"TokenStorageEndpoint"`
 	MessageCallbackEndpoint string `json:"MessageCallbackEndpoint"`
+	KahlaServer 			string `json:"KahlaServer"`
 }
