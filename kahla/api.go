@@ -2,13 +2,11 @@ package kahla
 
 import (
 	"Kahla.PublicAddress.Server/errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
 
-	"Kahla.PublicAddress.Server/consts"
 	"Kahla.PublicAddress.Server/models"
 )
 
@@ -16,7 +14,7 @@ func (s *AuthService) Login(email string, password string) (*models.LoginRespons
 	v := url.Values{}
 	v.Add("Email", email)
 	v.Add("Password", password)
-	req, err := NewPostRequest(consts.KahlaServer+"/Auth/AuthByPassword", v)
+	req, err := NewPostRequest(s.config.KahlaServer+"/Auth/AuthByPassword", v)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +27,7 @@ func (s *AuthService) Login(email string, password string) (*models.LoginRespons
 }
 
 func (s *AuthService) InitPusher() (*models.InitPusherResponse, error) {
-	req, err := http.NewRequest("GET", consts.KahlaServer+"/Auth/InitPusher", nil)
+	req, err := http.NewRequest("GET", s.config.KahlaServer+"/Auth/InitPusher", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +40,7 @@ func (s *AuthService) InitPusher() (*models.InitPusherResponse, error) {
 }
 
 func (s *FriendshipService) All() (*models.AllResponse, error) {
-	req, err := http.NewRequest("GET", consts.KahlaServer+"/conversation/All", nil)
+	req, err := http.NewRequest("GET", s.config.KahlaServer+"/conversation/All", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +53,7 @@ func (s *FriendshipService) All() (*models.AllResponse, error) {
 }
 
 func (s *FriendshipService) MyRequests() (*models.MyRequestsResponse, error) {
-	req, err := http.NewRequest("GET", consts.KahlaServer+"/friendship/MyRequests", nil)
+	req, err := http.NewRequest("GET", s.config.KahlaServer+"/friendship/MyRequests", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +68,7 @@ func (s *FriendshipService) MyRequests() (*models.MyRequestsResponse, error) {
 func (s *FriendshipService) CompleteRequest(requestId int, accept bool) (*models.CompleteRequestResponse, error) {
 	v := url.Values{}
 	v.Add("accept", strconv.FormatBool(accept))
-	req, err := NewPostRequest(consts.KahlaServer+"/Friendship/CompleteRequest/"+strconv.Itoa(requestId), v)
+	req, err := NewPostRequest(s.config.KahlaServer+"/Friendship/CompleteRequest/"+strconv.Itoa(requestId), v)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +84,7 @@ func (s *OssService) HeadImgFile(headImgFileKey int, w int, h int) ([]byte, erro
 	v := url.Values{}
 	v.Set("w", strconv.Itoa(w))
 	v.Set("h", strconv.Itoa(h))
-	resp, err := s.client.client.Get("https://oss.aiursoft.com/download/fromkey/" + strconv.Itoa(headImgFileKey) + "?" + v.Encode())
+	resp, err := s.client.client.Get("https://oss.cdn.aiursoft.com/download/fromkey/" + strconv.Itoa(headImgFileKey) + "?" + v.Encode())
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +99,7 @@ func (s *OssService) FileDownloadAddress(FileKey int) (string, error) {
 	v := url.Values{}
 	v.Set("FileKey", strconv.Itoa(FileKey))
 
-	req, err := NewPostRequest(consts.KahlaServer+"/files/FileDownloadAddress", v)
+	req, err := NewPostRequest(s.config.KahlaServer+"/files/FileDownloadAddress", v)
 
 	if err != nil {
 		return "", err
@@ -120,8 +118,8 @@ func (s *OssService) FileDownloadAddress(FileKey int) (string, error) {
 func (c *ConversationService) SendMessage(conversationId int, content string) (*models.SendMessageResponse, error) {
 	v := url.Values{}
 	v.Add("content", content)
-	fmt.Println(content)
-	req, err := NewPostRequest(consts.KahlaServer+"/conversation/SendMessage/"+strconv.Itoa(conversationId), v)
+
+	req, err := NewPostRequest(c.config.KahlaServer+"/conversation/SendMessage/"+strconv.Itoa(conversationId), v)
 	if err != nil {
 		return nil, err
 	}

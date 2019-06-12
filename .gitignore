@@ -16,3 +16,4 @@ vendor/
 go.sum
 .DS_Store
 .idea
+config.json

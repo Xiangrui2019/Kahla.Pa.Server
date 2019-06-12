@@ -3,7 +3,9 @@ package kahla
 import (
 	"Kahla.PublicAddress.Server/errors"
 	"Kahla.PublicAddress.Server/models"
+	"Kahla.PublicAddress.Server/services"
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -21,6 +23,7 @@ type Client struct {
 
 type service struct {
 	client *Client
+	config *models.Config
 }
 
 // Define Services
@@ -33,10 +36,14 @@ func NewClient() *Client {
 	c := new(Client)
 	c.client = http.Client{}
 	c.client.Jar, _ = cookiejar.New(nil)
-	c.Auth = &AuthService{c}
-	c.Conversation = &ConversationService{c}
-	c.Friendship = &FriendshipService{c}
-	c.Oss = &OssService{c}
+	data, err := services.LoadConfigFromFile("./config.json")
+	if err != nil{
+		log.Println(err)
+	}
+	c.Auth = &AuthService{c, data}
+	c.Conversation = &ConversationService{c, data}
+	c.Friendship = &FriendshipService{c, data}
+	c.Oss = &OssService{c, data}
 	return c
 }
 
