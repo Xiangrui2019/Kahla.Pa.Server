@@ -2,7 +2,6 @@ package kahla
 
 import (
 	"Kahla.PublicAddress.Server/errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -86,7 +85,7 @@ func (s *OssService) HeadImgFile(headImgFileKey int, w int, h int) ([]byte, erro
 	v := url.Values{}
 	v.Set("w", strconv.Itoa(w))
 	v.Set("h", strconv.Itoa(h))
-	resp, err := s.client.client.Get("https://oss.aiursoft.com/download/fromkey/" + strconv.Itoa(headImgFileKey) + "?" + v.Encode())
+	resp, err := s.client.client.Get("https://oss.cdn.aiursoft.com/download/fromkey/" + strconv.Itoa(headImgFileKey) + "?" + v.Encode())
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +119,7 @@ func (s *OssService) FileDownloadAddress(FileKey int) (string, error) {
 func (c *ConversationService) SendMessage(conversationId int, content string) (*models.SendMessageResponse, error) {
 	v := url.Values{}
 	v.Add("content", content)
-	fmt.Println(content)
+
 	req, err := NewPostRequest(consts.KahlaServer+"/conversation/SendMessage/"+strconv.Itoa(conversationId), v)
 	if err != nil {
 		return nil, err

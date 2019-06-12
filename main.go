@@ -1,6 +1,8 @@
 package main
 
 import (
+	"Kahla.PublicAddress.Server/models"
+	"Kahla.PublicAddress.Server/services"
 	"os"
 	"os/signal"
 )
@@ -8,13 +10,13 @@ import (
 func main() {
 	configFile := "config.json"
 	if !fileExists(configFile) {
-		err := SaveConfigToFile(configFile, new(Config))
+		err := services.SaveConfigToFile(configFile, new(models.Config))
 		if err != nil {
 			panic(err)
 		}
 		return
 	}
-	config, err := LoadConfigFromFile(configFile)
+	config, err := services.LoadConfigFromFile(configFile)
 	if err != nil {
 		panic(err)
 	}
