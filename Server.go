@@ -191,7 +191,7 @@ func (this *PublicAddressServer) StartEventListener(interrupt <-chan struct{}, d
 
 							defer resp.Body.Close()
 
-							body, err :=ioutil.ReadAll(resp.Body)
+							body, err := ioutil.ReadAll(resp.Body)
 
 							if err != nil {
 								log.Println(err)
